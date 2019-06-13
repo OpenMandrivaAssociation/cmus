@@ -1,0 +1,5 @@
+# libmp4v2-devel is the right BReq also on x86_64
+addFilter("E: invalid-build-requires")
+
+# The configure script has all the necessary to detect it
+addFilter("W: configure-without-libdir-spec")
