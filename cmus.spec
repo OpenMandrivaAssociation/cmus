@@ -6,7 +6,7 @@ Version:	2.8.0
 Release:	1.rc0
 License:	GPLv2+
 Group:		Sound
-Url:		http://cmus.github.io/
+Url:		https://cmus.github.io/
 Source0:	https://github.com/cmus/cmus/archive/%{name}-%{version}-rc0.tar.gz
 Source100:	%{name}.rpmlintrc
 BuildRequires:	ffmpeg-devel
