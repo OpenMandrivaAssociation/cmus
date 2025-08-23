@@ -1,21 +1,30 @@
-%define	_disable_ld_no_undefined 0
+%global _disable_ld_no_undefined 1
 
 Summary:	A powerful ncurses-based music player
-Name:		cmus
-Version:	2.8.0
-Release:	1.rc0
+Name:	cmus
+Version:	2.12.0
+Release:	1
 License:	GPLv2+
 Group:		Sound
 Url:		https://cmus.github.io/
-Source0:	https://github.com/cmus/cmus/archive/%{name}-%{version}-rc0.tar.gz
-Source100:	%{name}.rpmlintrc
-BuildRequires:	ffmpeg-devel
+Source0:	https://github.com/cmus/cmus/archive/%{name}-%{version}.tar.gz
+Patch0:	cmus-2.12.0-fix-install.patch
+Patch1:	cmus-2.12.0-ensure-the-buffer-is-at-least-80ms.patch
+Patch2:	cmus-2.12.0-make-the-buffer-capacity-configurable.patch
+Patch3:	cmus-2.12.0-check-for-libavutil.patch
+Patch4:	cmus-2.12.0-add-sort-by-duration.patch
+Patch5:	cmus-2.12.0-respect-scroll_offset-when-resizing-window.patch
+Patch6:	cmus-2.12.0-try-to-fallback-upon-plugin-output-init-failure.patch
 BuildRequires:	libmp4v2-devel
 BuildRequires:	libmpcdec-devel
-BuildRequires:	soundio-devel
 BuildRequires:	pkgconfig(alsa)
 BuildRequires:	pkgconfig(ao)
 BuildRequires:	pkgconfig(flac)
+BuildRequires:	pkgconfig(jack)
+BuildRequires:	pkgconfig(libass)
+BuildRequires:	pkgconfig(libavcodec)
+BuildRequires:	pkgconfig(libavformat)
+BuildRequires:	pkgconfig(libavutil)
 BuildRequires:	pkgconfig(libcddb)
 BuildRequires:	pkgconfig(libcdio_cdda)
 BuildRequires:	pkgconfig(libcue)
@@ -27,8 +36,12 @@ BuildRequires:	pkgconfig(libsystemd)
 BuildRequires:	pkgconfig(mad)
 BuildRequires:	pkgconfig(ncursesw)
 BuildRequires:	pkgconfig(opus)
+BuildRequires:	pkgconfig(opusfile)
 BuildRequires:	pkgconfig(samplerate)
-BuildRequires:	pkgconfig(vorbis)
+BuildRequires:	pkgconfig(sndio)
+BuildRequires:	pkgconfig(libswresample)
+BuildRequires:	pkgconfig(vorbisenc)
+BuildRequires:	pkgconfig(vorbisfile)
 BuildRequires:	pkgconfig(wavpack)
 Requires:	ncurses
 
@@ -48,6 +61,8 @@ lists.
 %dir %{_datadir}/%{name}/
 %{_datadir}/%{name}/*.theme
 %{_datadir}/%{name}/rc
+%{_datadir}/bash-completion/completions/%{name}
+%{_docdir}/%{name}/examples/%{name}-status-display
 %{_mandir}/man1/%{name}.1*
 %{_mandir}/man1/%{name}-remote.1*
 %{_mandir}/man7/%{name}-tutorial.7*
@@ -55,19 +70,26 @@ lists.
 #----------------------------------------------------------------------------
 
 %prep
-%setup -qn %{name}-%{version}-rc0
+%autosetup -p1
 
 
 %build
-%setup_compile_flags
+# Not an autotools configure: we cannot use our macro
+%set_build_flags
 ./configure \
-	prefix=%{_prefix} \
-	libdir=%{_libdir} \
+	prefix="%{_prefix}" \
+	libdir="%{_libdir}" \
+	bindir="%{_bindir}" \
+	mandir="%{_mandir}" \
 	CONFIG_MIKMOD=y \
 	DEBUG=0
-%make
+
+%make_build
 
 
 %install
-%makeinstall_std
+%make_install
 
+# Install the not automatically installed completion files
+mkdir -p %{buildroot}%{_datadir}/bash-completion/completions
+install -m644 contrib/%{name}.bash-completion %{buildroot}%{_datadir}/bash-completion/completions/%{name}
