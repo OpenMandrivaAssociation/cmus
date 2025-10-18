@@ -1,20 +1,22 @@
 %global _disable_ld_no_undefined 1
 
+# Pick git head and avoid to have too many patches
+%define	gitcommit	32e0cde0a3c8d082d71342577e33c380219d25a6
+%define	gitdate	20251007
+
 Summary:	A powerful ncurses-based music player
 Name:	cmus
 Version:	2.12.0
-Release:	2
+Release:	3
 License:	GPLv2+
-Group:		Sound
+Group:	Sound
 Url:		https://cmus.github.io/
+%if %{gitdate}
+Source0:	%{name}-%{gitdate}.tar.xz
+%else
 Source0:	https://github.com/cmus/cmus/archive/%{name}-%{version}.tar.gz
-Patch0:	cmus-2.12.0-fix-install.patch
-Patch1:	cmus-2.12.0-ensure-the-buffer-is-at-least-80ms.patch
-Patch2:	cmus-2.12.0-make-the-buffer-capacity-configurable.patch
-Patch3:	cmus-2.12.0-check-for-libavutil.patch
-Patch4:	cmus-2.12.0-add-sort-by-duration.patch
-Patch5:	cmus-2.12.0-respect-scroll_offset-when-resizing-window.patch
-Patch6:	cmus-2.12.0-try-to-fallback-upon-plugin-output-init-failure.patch
+%endif
+Patch0:	cmus-20251007-fix-install.patch
 BuildRequires:	libmp4v2-devel
 BuildRequires:	libmpcdec-devel
 BuildRequires:	pkgconfig(alsa)
@@ -70,7 +72,7 @@ lists.
 #----------------------------------------------------------------------------
 
 %prep
-%autosetup -p1
+%autosetup -p1 -n %{name}-%{gitdate}
 
 
 %build
@@ -82,9 +84,10 @@ lists.
 	bindir="%{_bindir}" \
 	mandir="%{_mandir}" \
 	CONFIG_MIKMOD=y \
+	CONFIG_ROAR=n \
 	DEBUG=0
 
-%make_build
+%make_build all
 
 
 %install
