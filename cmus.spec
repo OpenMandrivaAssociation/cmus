@@ -1,13 +1,13 @@
 %global _disable_ld_no_undefined 1
 
 # Pick git head and avoid to have too many patches
-%define	gitcommit	32e0cde0a3c8d082d71342577e33c380219d25a6
-%define	gitdate	20251007
+%define	gitcommit	56446f70e86445caa96f6f4f0188f175fc1fd9a0
+%define	gitdate	20251212
 
 Summary:	A powerful ncurses-based music player
 Name:	cmus
 Version:	2.12.0
-Release:	3
+Release:	4
 License:	GPLv2+
 Group:	Sound
 Url:		https://cmus.github.io/
