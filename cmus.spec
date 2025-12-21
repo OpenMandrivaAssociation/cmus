@@ -17,6 +17,10 @@ Source0:	%{name}-%{gitdate}.tar.xz
 Source0:	https://github.com/cmus/cmus/archive/%{name}-%{version}.tar.gz
 %endif
 Patch0:	cmus-20251007-fix-install.patch
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	libtool-base
+BuildRequires:	slibtool
 BuildRequires:	make
 BuildRequires:	libmp4v2-devel
 BuildRequires:	libmpcdec-devel
