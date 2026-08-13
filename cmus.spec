@@ -7,7 +7,7 @@
 Summary:	A powerful ncurses-based music player
 Name:	cmus
 Version:	2.12.0
-Release:	7
+Release:	8
 License:	GPLv2+
 Group:	Sound
 Url:		https://cmus.github.io/
@@ -92,7 +92,8 @@ lists.
 	CONFIG_ROAR=n \
 	DEBUG=0
 
-%make_build all
+# Doc/ttman is a host helper; RPM LDFLAGS (-latomic / as-needed / LTO) break ld.bfd on x86_64
+%make_build all HOSTLDFLAGS="-O2"
 
 
 %install
