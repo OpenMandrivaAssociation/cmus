@@ -92,8 +92,8 @@ lists.
 	CONFIG_ROAR=n \
 	DEBUG=0
 
-# Doc/ttman is a host helper; RPM LDFLAGS (-latomic / as-needed / LTO) break ld.bfd on x86_64
-%make_build all HOSTLDFLAGS="-O2"
+# Doc/ttman uses HOST_LDFLAGS; RPM LDFLAGS (-latomic --as-needed) become -latomic_asneeded for ld.bfd
+%make_build all HOST_LDFLAGS="-O2" HOSTLD="%{__cc}"
 
 
 %install
