@@ -7,7 +7,7 @@
 Summary:	A powerful ncurses-based music player
 Name:	cmus
 Version:	2.12.0
-Release:	6
+Release:	7
 License:	GPLv2+
 Group:	Sound
 Url:		https://cmus.github.io/
