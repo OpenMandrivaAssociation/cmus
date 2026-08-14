@@ -92,8 +92,8 @@ lists.
 	CONFIG_ROAR=n \
 	DEBUG=0
 
-# Doc/ttman uses HOST_LDFLAGS; RPM LDFLAGS (-latomic --as-needed) become -latomic_asneeded for ld.bfd
-%make_build all HOST_LDFLAGS="-O2" HOSTLD="%{__cc}"
+# Doc/ttman is a host helper; do not inherit RPM LDFLAGS, and compile PIC for lld
+%make_build all HOSTCC="%{__cc}" HOSTLD="%{__cc}" HOST_CFLAGS="-O2 -fPIC" HOST_LDFLAGS="-O2 -fPIC"
 
 
 %install
