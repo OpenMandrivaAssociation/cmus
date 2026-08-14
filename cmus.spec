@@ -7,7 +7,7 @@
 Summary:	A powerful ncurses-based music player
 Name:	cmus
 Version:	2.12.0
-Release:	8
+Release:	9
 License:	GPLv2+
 Group:	Sound
 Url:		https://cmus.github.io/
@@ -17,6 +17,7 @@ Source0:	%{name}-%{gitdate}.tar.xz
 Source0:	https://github.com/cmus/cmus/archive/%{name}-%{version}.tar.gz
 %endif
 Patch0:	cmus-20251007-fix-install.patch
+Patch1:	cmus-ttman-fpic.patch
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	libtool-base
@@ -92,8 +93,8 @@ lists.
 	CONFIG_ROAR=n \
 	DEBUG=0
 
-# Doc/ttman is a host helper; do not inherit RPM LDFLAGS, and compile PIC for lld
-%make_build all HOSTCC="%{__cc}" HOSTLD="%{__cc}" HOST_CFLAGS="-O2 -fPIC" HOST_LDFLAGS="-O2 -fPIC"
+# Doc/ttman is a host helper: lld defaults to PIE and rejects non-PIC objects
+%make_build all HOSTCC="%{__cc}" HOSTLD="%{__cc}" HOST_CFLAGS="-O2 -fPIC" HOST_LDFLAGS="-O2 -fPIC -no-pie"
 
 
 %install
