@@ -93,8 +93,8 @@ lists.
 	CONFIG_ROAR=n \
 	DEBUG=0
 
-# Doc/ttman is a host helper: lld defaults to PIE and rejects non-PIC objects
-%make_build all HOSTCC="%{__cc}" HOSTLD="%{__cc}" HOST_CFLAGS="-O2 -fPIC" HOST_LDFLAGS="-O2 -fPIC -no-pie"
+# Doc/ttman is a host helper; lld defaults to PIE and needs PIC objects
+%make_build all HOSTCC="%{__cc}" HOSTLD="%{__cc}" HOST_CFLAGS="-O2 -fPIC" HOST_LDFLAGS="-O2 -fPIC"
 
 
 %install

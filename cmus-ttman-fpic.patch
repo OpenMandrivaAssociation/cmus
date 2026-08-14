@@ -1,21 +1,21 @@
 diff -rupN cmus-20251212.old/Makefile cmus-20251212/Makefile
 --- cmus-20251212.old/Makefile	2025-12-11 23:27:42.000000000 +0100
-+++ cmus-20251212/Makefile	2026-08-14 04:32:35.684117212 +0200
-@@ -256,9 +256,11 @@ $(man7): Doc/ttman
++++ cmus-20251212/Makefile	2026-08-14 04:38:41.033755287 +0200
+@@ -255,9 +255,11 @@ $(man7): Doc/ttman
+ %.7: %.txt
  	$(call cmd,ttman)
  
- Doc/ttman.o: Doc/ttman.c
 +Doc/ttman.o: HOST_CFLAGS += -fPIC
+ Doc/ttman.o: Doc/ttman.c
  	$(call cmd,hostcc,)
  
++Doc/ttman: HOST_LDFLAGS += -fPIC
  Doc/ttman: Doc/ttman.o
-+Doc/ttman: HOST_LDFLAGS += -fPIC -no-pie
  	$(call cmd,hostld,)
  
- quiet_cmd_ttman = MAN    $@
 diff -rupN cmus-20251212.old/scripts/checks.sh cmus-20251212/scripts/checks.sh
 --- cmus-20251212.old/scripts/checks.sh	2025-12-11 23:27:42.000000000 +0100
-+++ cmus-20251212/scripts/checks.sh	2026-08-14 04:32:35.702877859 +0200
++++ cmus-20251212/scripts/checks.sh	2026-08-14 04:38:41.033808858 +0200
 @@ -185,8 +185,8 @@ check_host_cc()
  {
  	var_default HOSTCC gcc
@@ -23,7 +23,7 @@ diff -rupN cmus-20251212.old/scripts/checks.sh cmus-20251212/scripts/checks.sh
 -	var_default HOST_CFLAGS "-g -O2 -Wall"
 -	var_default HOST_LDFLAGS ""
 +	var_default HOST_CFLAGS "-g -O2 -Wall -fPIC"
-+	var_default HOST_LDFLAGS "-fPIC -no-pie"
++	var_default HOST_LDFLAGS "-fPIC"
  	check_program $HOSTCC || return 1
  	makefile_vars HOSTCC HOSTLD HOST_CFLAGS HOST_LDFLAGS
  	__check_lang=c
